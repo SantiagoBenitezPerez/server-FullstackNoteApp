@@ -1,10 +1,11 @@
 const express = require('express')
 const app = express()
+const cors = require('cors');
 
 let notes = [
   {
     id: 1,
-    content: "HTML is easy",
+    content: "HTML easy",
     date: "2022-01-10T17:30:31.098Z",
     important: true
   },
@@ -30,9 +31,13 @@ const requestLogger = (request, response, next) => {
   next()
 }
 
+
 app.use(express.json())
 
 app.use(requestLogger)
+
+app.use(cors())
+
 
 app.get('/', (req, res) => {
   res.send('<h1>Hello World!</h1>')
@@ -94,7 +99,7 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint)
 
-const PORT = 3001
+const PORT = 3001 || process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
