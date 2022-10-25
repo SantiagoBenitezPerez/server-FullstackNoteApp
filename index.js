@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
-const cors = require('cors');
-require('dotenv').config()
+const cors = require('cors')
+require('dotenv').config(path = '.env')
 const Note = require('./models/note')
 
 
@@ -22,6 +22,8 @@ app.use(express.static('build'));
 app.use(requestLogger)
 
 app.use(cors())
+
+
 
 
 // route handlers
