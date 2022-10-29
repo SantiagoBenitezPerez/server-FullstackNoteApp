@@ -34,12 +34,12 @@ app.get('/', (req, res) => {
 
 app.post('/api/notes', (request, response, next) => {
   const body = request.body
-  
-  if (body.content == undefined) {
-    return response.status(400).json({ 
-      error: 'content missing' 
-    })
-  }
+  console.log(body)
+  // if (body.content == undefined) {
+  //   return response.status(400).json({ 
+  //     error: 'content missing' 
+  //   })
+  // }
 
   const note = new Note({
     content: body.content,
@@ -116,7 +116,7 @@ app.put('/api/notes/:id', (request, response, next) => {
       important: body.important
     }
 
-    Note.findByIdAndUpdate(request.params.id, note, {new:true})
+    Note.findByIdAndUpdate(request.params.id, note, {new:true, runValidators: true, context: 'query'})
     .then(updatedNote => response.json(updatedNote))
     .catch(err => next(err))
 })
@@ -133,7 +133,7 @@ app.use(unknownEndpoint)
 
 const errorHandler = (error, request, response, next) => {
   console.log({error})
-
+  
   if(error.name === 'CastError') {
     return response.status(400).send({error: "malformatted id"})
   } else if(error.name === 'ValidationError' ) { 
