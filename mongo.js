@@ -18,17 +18,17 @@ const noteSchema = new mongoose.Schema({
 const Note = mongoose.model('Note', noteSchema)
 
 mongoose
- .connect(url)
- .then(result => {
-  Note.find({}).then(result => {
-    result.forEach(note => {
-      console.log(note);
+  .connect(url)
+  .then(result => {
+    Note.find({}).then(result => {
+      result.forEach(note => {
+        console.log(note)
+      })
+      mongoose.connection.close()
     })
-    mongoose.connection.close();
+
   })
-  
- })
-.catch(err => console.log(err));
+  .catch(err => console.log(err))
 
 // mongoose
 //   .connect(url)
