@@ -5,7 +5,7 @@ const Note = require('../models/note')
 const User = require('../models/user')
 
 // get token from request to post new notes
-const getTokenFrom = request => {
+const getTokenFrom = (request) => {
   const authorization = request.get('authorization')
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
     return authorization.substring(7)
@@ -18,15 +18,13 @@ notesRouter.get('/', async (request, response) => {
   response.json(notes)
 })
 
-notesRouter.get('/:id', async (request, response, next) => {
-
+notesRouter.get('/:id', async (request, response) => {
   const note = await Note.findById(request.params.id)
-  if(note) {
+  if (note) {
     response.json(note)
   } else {
     response.status(404).end()
   }
-
 })
 
 notesRouter.post('/', async (request, response) => {
@@ -44,7 +42,7 @@ notesRouter.post('/', async (request, response) => {
     content: body.content,
     important: body.important || false,
     date: new Date(),
-    user: user._id
+    user: user._id,
   })
 
   const savedNote = await note.save()
@@ -52,17 +50,12 @@ notesRouter.post('/', async (request, response) => {
   await user.save()
 
   response.status(201).json(savedNote)
-
-
-
 })
 
-notesRouter.delete('/:id', async (request, response, next) => {
+notesRouter.delete('/:id', async (request, response) => {
   await Note.findByIdAndRemove(request.params.id)
   response.status(204).end()
 })
-
-
 
 notesRouter.put('/:id', (request, response, next) => {
   const body = request.body
@@ -73,10 +66,10 @@ notesRouter.put('/:id', (request, response, next) => {
   }
 
   Note.findByIdAndUpdate(request.params.id, note, { new: true })
-    .then(updatedNote => {
+    .then((updatedNote) => {
       response.json(updatedNote)
     })
-    .catch(error => next(error))
+    .catch((error) => next(error))
 })
 
 module.exports = notesRouter
